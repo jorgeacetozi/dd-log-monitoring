@@ -9,11 +9,11 @@ import com.jorgeacetozi.dd.logmonitoring.alert.Alert;
  * 2) If the alert was active and its value is now below the threshold, a recovery notification is sent
  * out using the alert's handlers
  */
-public class TriggerAlertTask implements Runnable {
+public class ExecuteAlertsTask implements Runnable {
 
   private final List<Alert> alerts;
 
-  public TriggerAlertTask(List<Alert> alerts) {
+  public ExecuteAlertsTask(List<Alert> alerts) {
     this.alerts = alerts;
   }
 

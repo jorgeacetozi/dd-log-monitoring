@@ -20,7 +20,7 @@ import com.jorgeacetozi.dd.logmonitoring.storage.InMemoryStorage;
 import com.jorgeacetozi.dd.logmonitoring.storage.Storage;
 import com.jorgeacetozi.dd.logmonitoring.tasks.GenerateStatsTask;
 import com.jorgeacetozi.dd.logmonitoring.tasks.TailAccessLogTask;
-import com.jorgeacetozi.dd.logmonitoring.tasks.TriggerAlertTask;
+import com.jorgeacetozi.dd.logmonitoring.tasks.ExecuteAlertsTask;
 
 public class DDLogMonitoringApp {
 
@@ -69,7 +69,7 @@ public class DDLogMonitoringApp {
     scheduledExecutor.scheduleAtFixedRate(new GenerateStatsTask(statsList, handlers), 5,
         DISPLAY_STATS_INTERVAL_SEC, SECONDS);
 
-    scheduledExecutor.scheduleAtFixedRate(new TriggerAlertTask(alerts), 5,
+    scheduledExecutor.scheduleAtFixedRate(new ExecuteAlertsTask(alerts), 5,
         EXECUTE_ALERTS_INTERVAL_SEC, SECONDS);
 
     fileReaderExecutor
