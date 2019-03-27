@@ -9,44 +9,35 @@ import com.jorgeacetozi.dd.logmonitoring.model.Request;
 import com.jorgeacetozi.dd.logmonitoring.storage.InMemoryStorage;
 import com.jorgeacetozi.dd.logmonitoring.storage.Storage;
 
-public class AverageTotalRequestsPerSecondStatsTest {
+public class AverageTotalBytesPerSecondStatsTest {
 
   @Test
-  public void shouldCalculateTheAverageRequestsPerSecondForThePastSeconds() {
+  public void shouldCalculateTheAverageBytesPerSecondForThePastSeconds() {
     Storage storage = new InMemoryStorage(5);
-    Stats<Double> stats = new AverageTotalRequestsPerSecondStats(storage, 5);
+    Stats<Double> stats = new AverageTotalBytesPerSecondStats(storage, 5);
     assertThat(stats.calculate(), equalTo(0.0));
 
     String line = "127.0.0.1 - a [09/May/2018:16:00:41 +0000] \"GET /api/user HTTP/1.0\" 200 234";
     storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(0.2));
+    assertThat(stats.calculate(), equalTo(46.8));
 
     storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(0.4));
+    assertThat(stats.calculate(), equalTo(93.6));
 
     storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(0.6));
+    assertThat(stats.calculate(), equalTo(140.4));
 
     storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(0.8));
+    assertThat(stats.calculate(), equalTo(187.2));
 
     storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(1.0));
-
-    // Inserting a DataPoint removes the oldest one, so the average
-    // stays the same as this DataPoint contains one request too
-    storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(1.0));
-
-    // Same here
-    storage.insert(new DataPoint(new Request(line)));
-    assertThat(stats.calculate(), equalTo(1.0));
+    assertThat(stats.calculate(), equalTo(234.0));
 
     // Now we will duplicate the number of requests in the storage by adding
-    // a new DataPoint with 6 requests
+    // a new DataPoint with 6 requests (remember that the oldest data point will be evicted)
     storage.insert(new DataPoint(Arrays.asList(new Request(line), new Request(line),
         new Request(line), new Request(line), new Request(line), new Request(line))));
-    assertThat(stats.calculate(), equalTo(2.0));
+    assertThat(stats.calculate(), equalTo(468.0));
   }
 
 }
