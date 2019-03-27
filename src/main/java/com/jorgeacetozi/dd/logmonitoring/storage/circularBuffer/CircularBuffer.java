@@ -83,6 +83,7 @@ public class CircularBuffer<T> {
       subList.add(get(actualStart).get());
       actualStart = (actualStart + 1) % capacity;
     }
+    subList.add(get(actualStart).get());
     return subList;
   }
 
