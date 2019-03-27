@@ -1,0 +1,3 @@
+accesslog.path=/tmp/access.log
+scrape.interval.ms=1000
+alert.avgTotalRequestsPerSecond.threshold=10
