@@ -18,10 +18,12 @@ A standalone HTTP log monitoring application written in Java.
 
 **In order to run the application, make sure you have at least JDK 8 installed on your machine.**
 
-In order to run the application, download the executable `jar` and the application configuration file:
+Download the executable `jar` and the application configuration file:
 
 ```bash
-$ wget https://github.com/jorgeacetozi/dd-log-monitoring/releases/download/1.0.0/dd-log-monitoring-1.0.0.jar && wget https://github.com/jorgeacetozi/dd-log-monitoring/releases/download/1.0.0/dd-log-monitoring.properties
+$ wget https://github.com/jorgeacetozi/dd-log-monitoring/releases/download/1.0.0/dd-log-monitoring-1.0.0.jar
+
+$ wget https://github.com/jorgeacetozi/dd-log-monitoring/releases/download/1.0.0/dd-log-monitoring.properties
 ```
 
 Run the application:
