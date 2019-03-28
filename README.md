@@ -53,3 +53,13 @@ You can easily accomplish that by extending the [abstract class Stats](src/main/
 ### What if I want to send my notifications via Slack or Email?
 
 Easy again! Just implement the `Handler interface`, say SlackHandler or EmailHandler, and implement the method `sendNotification(String message)` (Strategy design pattern). Then, add your new handlers to your alerts and the notifications will automatically be sent without having to modify the existing code.
+
+## TODOs
+
+- Accept others log formats by extracting the logic from Request constructor to a LogParser component, which implements a Strategy pattern, each format being a different strategy.
+- Accept a list of access.log paths in the `dd-log-monitoring.properties` file so that it can monitor multiple files concurrently.
+- Create tests for the tasks.
+
+## Improvements
+
+In a scenario where this application is used to monitor a lot of log-intensive files on the filesystem, it could become CPU and memory intensive as it runs as a standalone application responsible for everything: collecting, parsing, storing, and notifying. In this case, a distributed architecture where each component is responsible for a single role would be more suitable (similar to what Elastic Stack does with Beats and Logstash or Fluentd with forwarders and aggregators).
