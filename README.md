@@ -64,4 +64,16 @@ Easy again! Just implement the `Handler interface`, say SlackHandler or EmailHan
 
 ## Improvements
 
+### Distributed Architecture for Scalability
+
 In a scenario where this application is used to monitor a lot of log-intensive files on the filesystem, it could become CPU and memory intensive as it runs as a standalone application responsible for everything: collecting, parsing, storing, and notifying. In this case, a distributed architecture where each component is responsible for a single role would be more suitable (similar to what Elastic Stack does with Beats and Logstash or Fluentd with forwarders and aggregators).
+
+### Crash Recovery
+
+1. Create a new task named SnapshotTask responsible for periodically (configurable via properties file) taking snapshots. A snapshot consists of persisting to disk the currentOffset, the in-memory storage, and the current LocalDateTime.
+2. Share a Lock between the SnapshotTask and the TailAccessLogTask to make sure a snapshot will not be issued when the TailAccessLogTask is active writing new DataPoints to the storage (which could lead to request duplication in case of a crash).
+3. After recovering from the crash, load the storage and the currentOffset from disk, get the delta in seconds between the snapshot's LocalDateTime and LocalDateTime.now() and add delta empty datapoints to the storage. After that, just continue processing the missing log lines normally. This will make sure to forward the storage the number of seconds between the last snapshot and now() positions, otherwise we would end up with datapoints in the wrong positions.
+
+### Non-Blocking TailAccessLogTask
+
+Currently, the TailAccessLogTask reads each line, parses and stores them into the storage, making this thread CPU-intensive and hence taking more time on each execution than if it was just responsible for reading each line and submitting a new task to another ThreadPool for parsing the log line into a Request and store it into the storage.
